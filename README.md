@@ -3,35 +3,10 @@
 Reads gear-shift events from a USB H-pattern shifter and runs customs shell script per gear change.
 Works on Linux and macOS.
 
-## Building
-
-With [Nix](https://nixos.org) (recommended):
-
-```sh
-nix build .#default    # -> result/bin/stick_shift
-```
-
-You can also build with `cargo build --release`. But you need to ensure that you have all the
-dependencies.
-
-
-### CI-built binaries
-
-GH actions builds `aarch64-linux`, `x86_64-linux`, and `aarch64-darwin` (Apple Silicon) via
-`nix build .#default` on GitHub-hosted runners.
-
-## Running
-
-```sh
-cargo run
-```
-
-On first run, `stick_shift` creates `~/.config/stickshift/` with a default
-`config.toml` and a stub `actions/` directory (see below), then polls for
-the configured device until it's plugged in. It keeps running and
-reconnects automatically if the device is unplugged.
-
 ## Configuration
+
+On first run, `stick_shift` creates `~/.config/stickshift/` with a default `config.toml`
+and a stub `actions/` directory.
 
 `~/.config/stickshift/config.toml`:
 
@@ -52,10 +27,9 @@ The device is matched by `vendor_id`/`product_id`, not by name.
 
 ```sh
 lsusb
-```
-
-```
-Bus 001 Device 005: ID 0079:0006 DragonRise Inc. Generic USB Joystick
+# ...
+# Bus 001 Device 005: ID 0079:0006 DragonRise Inc. Generic USB Joystick
+# ...
 ```
 
 The `ID` field is `vendor_id:product_id` in hex, followed by the name.
@@ -65,30 +39,59 @@ The `ID` field is `vendor_id:product_id` in hex, followed by the name.
 ```sh
 hidutil list
 ```
-
 prints a table of connected HID devices with `VendorID`, `ProductID`, and
 `Product` (name) columns. (`system_profiler SPUSBDataType` also works and
 shows the same IDs in a more verbose per-device listing.)
 
-## Gear-triggered scripts
+### Gear-triggered scripts
 
-Shifting into or out of a gear runs a script under
-`~/.config/stickshift/actions/`:
+Shifting into a gear runs the matching script under `actions/in/`;
+shifting out of it runs the one under `actions/out/`:
 
 ```
-actions/
-  in/
-    1.sh  2.sh  3.sh  4.sh  5.sh  6.sh  r.sh   # runs when shifting INTO the gear
-  out/
-    1.sh  2.sh  3.sh  4.sh  5.sh  6.sh  r.sh   # runs when shifting OUT OF the gear
+.config/stickshift
+├── actions
+│   ├── in
+│   │   ├── 1.sh
+│   │   ├── ...
+│   │   ├── 6.sh
+│   │   └── r.sh
+│   └── out
+│       ├── 1.sh
+│       ├── ...
+│       ├── 6.sh
+│       └── r.sh
+└── config.toml
 ```
 
 Stub scripts for all 6 gears + reverse are created automatically the
-first time `stick_shift` runs, if they don't already exist. Each script is
+first time `stickshift` runs, if they don't already exist. Each script is
 run non-blocking (via `sh`), so a slow script won't block event
 processing. See [`usage.md`](usage.md) for a cookbook of common script
-snippets (opening URLs/files, controlling macOS apps via `osascript`,
-closing multiple apps at once).
+snippets (opening URLs/files, controlling macOS apps via `osascript`, etc.).
+
+
+## Building
+
+With [Nix](https://nixos.org) (recommended):
+
+```sh
+nix build .#default    # -> result/bin/stickshift
+```
+
+You can also build with `cargo build --release`. But you need to ensure that you have all the
+dependencies.
+
+### CI-built binaries
+
+GH actions builds `aarch64-linux`, `x86_64-linux`, and `aarch64-darwin` (Apple Silicon) via
+`nix build .#default` on GitHub-hosted runners.
+
+## Running
+
+```sh
+cargo run
+```
 
 ## Logging
 

@@ -27,10 +27,6 @@
               rustfmt
               rust-analyzer
             ]
-            # gilrs-core's Linux backend links against libudev at build
-            # time (via pkg-config); its macOS backend uses IOKit/
-            # CoreFoundation frameworks instead, which don't need anything
-            # from Nix, so this is Linux-only.
             ++ lib.optionals stdenv.hostPlatform.isLinux [
               pkg-config
               udev
