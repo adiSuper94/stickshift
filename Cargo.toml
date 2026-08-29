@@ -5,7 +5,7 @@ edition = "2024"
 
 [dependencies]
 env_logger = "0.11.11"
-evdev = "0.13.2"
+gilrs-core = "0.6.8"
 log = "0.4.34"
 serde = { version = "1.0.229", features = ["derive"] }
 toml = "1.1.4"

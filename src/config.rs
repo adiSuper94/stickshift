@@ -4,6 +4,8 @@ use std::path::{Path, PathBuf};
 use serde::Deserialize;
 
 const DEFAULT_CONFIG_TOML: &str = r#"device_name = "DragonRise Generic USB Joystick"
+vendor_id = 0x0079
+product_id = 0x0006
 poll_interval_secs = 3
 log_level = "info"
 "#;
@@ -13,7 +15,11 @@ const GEARS: [&str; 7] = ["1", "2", "3", "4", "5", "6", "r"];
 #[derive(Deserialize)]
 #[serde(default)]
 pub struct Config {
+    /// Human-readable label, used only for logging.
+    /// the device is actually matched by `vendor_id`/`product_id`
     pub device_name: String,
+    pub vendor_id: u16,
+    pub product_id: u16,
     pub poll_interval_secs: u64,
     pub log_level: String,
 }
@@ -22,6 +28,8 @@ impl Default for Config {
     fn default() -> Self {
         Config {
             device_name: "DragonRise Generic USB Joystick".to_string(),
+            vendor_id: 0x0079,
+            product_id: 0x0006,
             poll_interval_secs: 3,
             log_level: "info".to_string(),
         }
@@ -31,9 +39,7 @@ impl Default for Config {
 pub fn stickshift_dir() -> PathBuf {
     let config_home = std::env::var_os("XDG_CONFIG_HOME")
         .map(PathBuf::from)
-        .unwrap_or_else(|| {
-            PathBuf::from(std::env::var("HOME").expect("$HOME is not set")).join(".config")
-        });
+        .unwrap_or_else(|| PathBuf::from(std::env::var("HOME").expect("$HOME is not set")).join(".config"));
     config_home.join("stickshift")
 }
 
@@ -57,9 +63,7 @@ pub fn ensure_layout(dir: &Path) {
                 eprintln!("Failed to create {} ({e})", script_path.display());
                 continue;
             }
-            if let Err(e) =
-                std::fs::set_permissions(&script_path, std::fs::Permissions::from_mode(0o755))
-            {
+            if let Err(e) = std::fs::set_permissions(&script_path, std::fs::Permissions::from_mode(0o755)) {
                 eprintln!("Failed to make {} executable ({e})", script_path.display());
             }
         }
@@ -76,10 +80,7 @@ pub fn ensure_layout(dir: &Path) {
 pub fn load_config(config_path: &Path) -> Config {
     match std::fs::read_to_string(config_path) {
         Ok(contents) => toml::from_str(&contents).unwrap_or_else(|e| {
-            eprintln!(
-                "Failed to parse {} ({e}), using defaults",
-                config_path.display()
-            );
+            eprintln!("Failed to parse {} ({e}), using defaults", config_path.display());
             Config::default()
         }),
         Err(_) => Config::default(),
