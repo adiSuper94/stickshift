@@ -1,4 +1,4 @@
-# stick_shift
+# stickshift
 
 Reads gear-shift events from a USB H-pattern shifter and runs customs shell script per gear change.
 Works on Linux and macOS.
@@ -8,19 +8,17 @@ Works on Linux and macOS.
 With [Nix](https://nixos.org) (recommended):
 
 ```sh
-nix develop     # drops you into a shell with cargo/rustc/clippy/rustfmt/rust-analyzer
-cargo build
-```
-
-or build a standalone binary without entering a dev shell:
-
-```sh
 nix build .#default    # -> result/bin/stick_shift
 ```
 
-Without Nix, a plain `cargo build` also works, as long as `pkg-config` and
-`libudev` (e.g. `libudev-dev` on Debian/Ubuntu) are installed — only
-needed on Linux; macOS has no extra system dependency.
+You can also build with `cargo build --release`. But you need to ensure that you have all the
+dependencies.
+
+
+### CI-built binaries
+
+GH actions builds `aarch64-linux`, `x86_64-linux`, and `aarch64-darwin` (Apple Silicon) via
+`nix build .#default` on GitHub-hosted runners.
 
 ## Running
 

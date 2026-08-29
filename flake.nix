@@ -12,7 +12,6 @@
         "aarch64-linux"
         "x86_64-linux"
         "aarch64-darwin"
-        "x86_64-darwin"
       ];
       forEachSystem = fn: nixpkgs.lib.genAttrs systems (system: fn nixpkgs.legacyPackages.${system});
     in
@@ -42,7 +41,7 @@
 
       packages = forEachSystem (pkgs: {
         default = pkgs.rustPlatform.buildRustPackage {
-          pname = "stick_shift";
+          pname = "stickshift";
           version = "0.1.0";
           src = ./.;
           cargoLock.lockFile = ./Cargo.lock;
