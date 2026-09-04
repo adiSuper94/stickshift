@@ -104,3 +104,13 @@ GH actions builds `aarch64-linux`, `x86_64-linux`, and `aarch64-darwin` (Apple S
 cargo run
 ```
 
+## Uninstalling 😢
+
+```sh
+stickshift uninstall
+```
+
+Stops and removes the background service, and deletes the `stickshift` binary itself. Your
+config scripts in `~/.config/stickshift/` are left in place; remove those manually if
+you want them gone too.
+

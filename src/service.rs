@@ -18,6 +18,10 @@ fn remove_file(path: &std::path::Path) {
     }
 }
 
+fn bin_path() -> io::Result<PathBuf> {
+    Ok(home_dir()?.join(".local/bin/stickshift"))
+}
+
 #[cfg(target_os = "linux")]
 pub fn uninstall() -> io::Result<()> {
     match Command::new("systemctl")
@@ -35,6 +39,8 @@ pub fn uninstall() -> io::Result<()> {
         warn!("failed to run systemctl daemon-reload: {e}");
     }
 
+    remove_file(&bin_path()?);
+
     Ok(())
 }
 
@@ -49,6 +55,7 @@ pub fn uninstall() -> io::Result<()> {
         .status();
 
     remove_file(&plist_path);
+    remove_file(&bin_path()?);
 
     Ok(())
 }
