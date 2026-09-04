@@ -1,0 +1,7 @@
+publish = false
+push = true
+sign-commit = true
+sign-tag = true
+tag-name = "v{{version}}"
+tag-message = "v{{version}}"
+pre-release-commit-message = "release: v{{version}}"

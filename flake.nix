@@ -14,6 +14,7 @@
         "aarch64-darwin"
       ];
       forEachSystem = fn: nixpkgs.lib.genAttrs systems (system: fn nixpkgs.legacyPackages.${system});
+      cargoToml = builtins.fromTOML (builtins.readFile ./Cargo.toml);
     in
     {
       devShells = forEachSystem (pkgs: {
@@ -26,6 +27,7 @@
               clippy
               rustfmt
               rust-analyzer
+              cargo-release
             ]
             ++ lib.optionals stdenv.hostPlatform.isLinux [
               pkg-config
@@ -38,7 +40,7 @@
       packages = forEachSystem (pkgs: {
         default = pkgs.rustPlatform.buildRustPackage {
           pname = "stickshift";
-          version = "0.1.0";
+          version = cargoToml.package.version;
           src = ./.;
           cargoLock.lockFile = ./Cargo.lock;
           nativeBuildInputs = pkgs.lib.optionals pkgs.stdenv.hostPlatform.isLinux [ pkgs.pkg-config ];
