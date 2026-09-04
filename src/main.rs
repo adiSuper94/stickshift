@@ -11,6 +11,8 @@ use config::{ensure_layout, load_config, stickshift_dir};
 mod platform;
 use platform::GearEvent;
 
+mod service;
+
 fn run_action(actions_dir: &Path, direction: &str, gear: &str) {
     let script = actions_dir.join(direction).join(format!("{}.sh", gear.to_lowercase()));
     if !script.is_file() {
@@ -53,6 +55,16 @@ fn handle_event(event: GearEvent, actions_dir: &Path) {
 }
 
 fn main() -> io::Result<()> {
+    if std::env::args().nth(1).as_deref() == Some("uninstall") {
+        env_logger::Builder::from_env(env_logger::Env::default().default_filter_or("info")).init();
+        service::uninstall()?;
+        info!(
+            "Config and action scripts in {} were left in place, not deleted.",
+            stickshift_dir().display()
+        );
+        return Ok(());
+    }
+
     let stickshift_dir = stickshift_dir();
     ensure_layout(&stickshift_dir);
     let config = load_config(&stickshift_dir.join("config.toml"));
