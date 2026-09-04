@@ -6,25 +6,25 @@ snippet you need into your own script.
 
 ## Opening files and URLs (`open`)
 
-Open a URL in the default browser:
+The `open` command is used to open files, or directory in the default app.
 
 ```sh
-open "https://elgato.com"
+open "$HOME/Downloads/somefile.pdf"
 ```
 
-Open a file with its default application:
+The `open` command can also be used to open URLs in the default web browser.
 
 ```sh
-open "$HOME/Documents/notes.txt"
+open "https://google.com"
 ```
 
-macOS only — open a file with a specific application instead of the default:
+Open a file with a specific application instead of the default:
 
 ```sh
 open -a "Preview" "$HOME/Documents/receipt.pdf"
 ```
 
-macOS only — reveal a file in Finder instead of opening it:
+Reveal a file in Finder instead of opening it:
 
 ```sh
 open -R "$HOME/Documents/notes.txt"
@@ -35,13 +35,25 @@ open -R "$HOME/Documents/notes.txt"
 Open (or switch to) an application:
 
 ```sh
-osascript -e 'tell application "Safari" to activate'
+osascript -e 'tell application "Claude" to reopen'
 ```
 
 Quit an application gracefully
 
 ```sh
-osascript -e 'tell application "Safari" to quit'
+osascript -e 'tell application "Claude" to quit'
+```
+
+Create a toast notification:
+
+```sh
+osascript -e 'display notification "Hello world!" with title "My App"'
+```
+
+Say something out loud:
+
+```sh
+say "I am Batman!"
 ```
 
 Make an application's front window full screen. Requires granting Accessibility

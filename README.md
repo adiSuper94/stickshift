@@ -49,10 +49,17 @@ The `ID` field is `vendor_id:product_id` in hex, followed by the name.
 
 ```sh
 hidutil list
+# Services:
+#...
+#
+# Devices:
+# VendorID ProductID LocationID UsagePage Usage RegistryID  Transport Class                 Product                 UserClass                 Built-In
+# ...
+# 0x79     0x6       0x1141000  1         4     0x100046f31 USB       AppleUserHIDDevice    Generic USB Joystick    AppleUserUSBHostHIDDevice 0
+# ...
 ```
 prints a table of connected HID devices with `VendorID`, `ProductID`, and
-`Product` (name) columns. (`system_profiler SPUSBDataType` also works and
-shows the same IDs in a more verbose per-device listing.)
+`Product` (name) columns.
 
 ### Gear-triggered scripts
 
@@ -76,10 +83,8 @@ shifting out of it runs the one under `actions/out/`:
 ```
 
 Stub scripts for all 6 gears + reverse are created automatically the
-first time `stickshift` runs, if they don't already exist. Each script is
-run non-blocking (via `sh`), so a slow script won't block event
-processing. See [`usage.md`](usage.md) for a cookbook of common script
-snippets (opening URLs/files, controlling macOS apps via `osascript`, etc.).
+first time `stickshift` runs, if they don't already exist. See [`usage.md`](usage.md) for a cookbook of common script
+snippets.
 
 
 ## Building
