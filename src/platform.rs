@@ -82,7 +82,8 @@ fn matching_gamepad_id(gilrs: &Gilrs, vendor_id: u16, product_id: u16) -> Option
 }
 
 pub fn find_device(config: &Config) -> io::Result<Device> {
-    let gilrs = Gilrs::new().map_err(|e| io::Error::other(e.to_string()))?;
+    let mut gilrs = Gilrs::new().map_err(|e| io::Error::other(e.to_string()))?;
+    while gilrs.next_event_blocking(Some(Duration::from_millis(200))).is_some() {}
     match matching_gamepad_id(&gilrs, config.vendor_id, config.product_id) {
         Some(id) => {
             info!("Found device (gamepad id {id})");
