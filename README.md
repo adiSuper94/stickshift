@@ -5,7 +5,7 @@ Works on Linux and macOS.
 
 ## Configuration
 
-On first run, `stick_shift` creates `~/.config/stickshift/` with a default `config.toml`
+On first run, `stickshift` creates `~/.config/stickshift/` with a default `config.toml`
 and a stub `actions/` directory.
 
 `~/.config/stickshift/config.toml`:
