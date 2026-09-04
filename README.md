@@ -3,6 +3,17 @@
 Reads gear-shift events from a USB H-pattern shifter and runs customs shell script per gear change.
 Works on Linux and macOS.
 
+### Installation
+
+Downloads the latest release for your OS/arch to `~/.local/bin/stickshift` and installs +
+enables the background service (systemd user unit on Linux, launchd agent on macOS):
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/adiSuper94/stickshift/main/install.sh | sh
+```
+
+Re-running it upgrades the binary in place and restarts the service.
+
 ## Configuration
 
 On first run, `stickshift` creates `~/.config/stickshift/` with a default `config.toml`
@@ -93,17 +104,3 @@ GH actions builds `aarch64-linux`, `x86_64-linux`, and `aarch64-darwin` (Apple S
 cargo run
 ```
 
-## Logging
-
-Controlled by `log_level` in `config.toml` (`error`/`warn`/`info`/`debug`/
-`trace`), or override at runtime with the standard `env_logger` env var:
-
-```sh
-RUST_LOG=debug cargo run
-```
-
-To log to a file instead of the console:
-
-```sh
-cargo run 2> stickshift.log
-```
